@@ -46,4 +46,4 @@ class ProductManager{
     };
 }
 
-module.exports = { UserManager }
+module.exports = { ProductManager }
