@@ -34,10 +34,10 @@ getProductById = (idCode)=>{
         return;
 }
 else {
-    this.productos [productoIndex].code (idProducto)
+    this.productos [productoIndex].code(idCode)
 }
 }
 };
 const manejadorProductos = new ProductManager ();
-manejadorProductos.addProduct ("harina","comestible",1000, "harina.jpg")
+manejadorProductos.addProduct ("harina","Harina 0000 ultrafina",1000)
 console.log (manejadorProductos.addProduct())
