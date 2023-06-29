@@ -3,7 +3,6 @@ class ProductManager {
         this.productos = [];
     }
 
-
     addProduct = (title, description, price, image, code, stock)=>{
         const producto = {
             title: "torta",
@@ -13,6 +12,7 @@ class ProductManager {
             code: 1,
             stock: 25,
         }
+
  if ( this.productos === 0){
     producto.code = 1}
     else{

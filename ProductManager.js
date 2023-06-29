@@ -20,8 +20,8 @@ class ProductManager{
                 await fs.promises.writeFile(this.path,JSON.stringify(product,null,'\t'));
                 console.log("producto creado");
             } else {
-                console.log("El archivo no existe");
-                await fs.promises.writeFile(this.path,JSON.stringify([user],null,'\t'));
+                console.log("El producto no existe");
+                await fs.promises.writeFile(this.path,JSON.stringify([product],null,'\t'));
                 console.log("producto creado");
             }
         } catch (error) {
@@ -30,7 +30,7 @@ class ProductManager{
         }
     };
 
-    async getProduct(){
+    async getproduct(){
         try {
             if(this.fileExist()){
                 const contenido = await fs.promises.readFile(this.path,"utf-8");
