@@ -6,27 +6,33 @@ const manager= new ProductManager (rutaArchivo)
 console.log ("manager:", manager)
 
 
-//funcion para utilizar los metodos asincronos del manager.
-const operaciones = async ()=>{
-try {
-    const exist= manager.fileExist();
-    console.log ("exist:", exist);
-   
-    // lectura de archivo
-    const resultado= await manager.getproduct();
-    console.log ("resultado:", resultado)
+// Obtener los productos (debe devolver un arreglo vacío [])
+console.log("Obtener los productos: ",manager.getProducts());
 
-    //agregar producto
-    await manager.addProduct({title: "torta", description:"chocotorta"});
-    await manager.addProduct({title: "alfajor", description:"blanco"});
+// Agregar un producto
+const product = {
+    title: 'producto prueba',
+    description: 'Este es un producto prueba',
+    price: 200,
+    thumbnail: 'Sin imagen',
+    code: 'abc123',
+    stock: 25,
+};
+manager.addProduct(product);
 
-    //ver productos
-    await manager.getproduct ([]);
-    
-} catch (error) {
-    
-}
+// Obtener los productos nuevamente (debe aparecer el producto recién agregado)
+console.log("Productos cargados: ",manager.getProducts());
 
-}
+// Obtener un producto por su ID (especifica un ID válido para tu caso)
+const productId = 1;
+const foundProduct = manager.getProductById(productId);
+console.log("Producto por ID: ",foundProduct);
 
-operaciones ();
+// Actualizar un producto (especifica un ID válido y los campos a actualizar)
+const updatedFields = { price: 250 };
+manager.updateProduct(productId, updatedFields);
+
+// Eliminar un producto (especifica un ID válido)
+manager.deleteProduct(productId);
+console.log("Obtener los produtos nuevamente: ",manager.getProducts());
+

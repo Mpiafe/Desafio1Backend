@@ -1,49 +1,76 @@
-const fs = require("fs");
 
-class ProductManager{
-    constructor(path){
-        this.path=path;
-    };
 
-    fileExist(){
-        return fs.existsSync(this.path);
+const fs = require('fs');
+
+class ProductManager {
+    constructor(path) {
+        this.path = path;
     }
 
-    async addProduct(product){
-        try {
-            if(this.fileExist()){
-                //leer el archivo
-                const contenido = await fs.promises.readFile(this.path,"utf-8");
-                const product = JSON.parse(contenido);
-                product.push(product);
-                //reescribimos el archivo con el nuevo contenido
-                await fs.promises.writeFile(this.path,JSON.stringify(product,null,'\t'));
-                console.log("producto creado");
-            } else {
-                console.log("El producto no existe");
-                await fs.promises.writeFile(this.path,JSON.stringify([product],null,'\t'));
-                console.log("producto creado");
-            }
-        } catch (error) {
-            console.log(error.message);
-            return undefined;
-        }
-    };
+    addProduct(product) {
+        const products = this.getProducts();
+        product.id = this.generateId(products);
+        products.push(product);
+        this.saveProducts(products);
+        return product.id;
+    }
 
-    async getproduct(){
+    getProducts() {
         try {
-            if(this.fileExist()){
-                const contenido = await fs.promises.readFile(this.path,"utf-8");
-                const contenidoJson = JSON.parse(contenido);
-                return contenidoJson;
-            } else {
-                return console.log("El archivo no existe");
-            }
+            const data = fs.readFileSync(this.path, 'utf-8');
+            return JSON.parse(data);
         } catch (error) {
-            console.log(error.message);
-            return undefined;
+            // Si el archivo no existe o está vacío, retorna un arreglo vacío
+            return [];
         }
-    };
+    }
+
+    getProductById(id) {
+        const products = this.getProducts();
+        return products.find(product => product.id === id);
+    }
+
+    updateProduct(id, updatedFields) {
+        const products = this.getProducts();
+        const index = products.findIndex(product => product.id === id);
+
+        if (index !== -1) {
+            const updatedProduct = { ...products[index], ...updatedFields };
+            products[index] = updatedProduct;
+            this.saveProducts(products);
+            return true;
+        }
+
+        return false;
+    }
+
+    deleteProduct(id) {
+        const products = this.getProducts();
+        const index = products.findIndex(product => product.id === id);
+
+        if (index !== -1) {
+            products.splice(index, 1);
+            this.saveProducts(products);
+            return true;
+        }
+
+        return false;
+    }
+
+    saveProducts(products) {
+        const data = JSON.stringify(products, null, 2);
+        fs.writeFileSync(this.path, data);
+    }
+
+    generateId(products) {
+        if (products.length === 0) {
+            return 1;
+        }
+        const maxId = Math.max(...products.map(product => product.id));
+        return maxId + 1;
+    }
 }
+
+
 
 module.exports = { ProductManager }
